@@ -1,0 +1,20 @@
+{
+	"name": "src_grup_provincies",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "caso de uso"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "SRC_PROVINCIES"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

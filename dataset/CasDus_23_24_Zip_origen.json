@@ -1,0 +1,62 @@
+{
+	"name": "CasDus_23_24_Zip_origen",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Caso de Uso 23-24"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "datos_cas_dus_2324.zip",
+				"container": "datoscasdus2324"
+			},
+			"columnDelimiter": ",",
+			"compressionCodec": "ZipDeflate",
+			"compressionLevel": "Optimal",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "PK\u0003\u0004\u0014\u0000\b\b\u0000\u0000�}dX\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000;\u0000\u0000\u0000Font de dades/casos_hosp_uci_def_sexo_edad_provres_full.csvprovincia_iso",
+				"type": "String"
+			},
+			{
+				"name": "sexo",
+				"type": "String"
+			},
+			{
+				"name": "grupo_edad",
+				"type": "String"
+			},
+			{
+				"name": "fecha",
+				"type": "String"
+			},
+			{
+				"name": "num_casos",
+				"type": "String"
+			},
+			{
+				"name": "num_hosp",
+				"type": "String"
+			},
+			{
+				"name": "num_uci",
+				"type": "String"
+			},
+			{
+				"name": "num_def",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

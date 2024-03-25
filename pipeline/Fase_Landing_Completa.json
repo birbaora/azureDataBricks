@@ -1,0 +1,121 @@
+{
+	"name": "Fase_Landing_Completa",
+	"properties": {
+		"activities": [
+			{
+				"name": "covid",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "tabla_covid",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "data",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "covid",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "tabla_data",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "grup_edat",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "tabla_grup_edat",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "provincies",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "grup_edat",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "tabla_provincies",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "sexe",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "provincies",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "tabla_sexe",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Caso de USO"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-04-03T15:37:05Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

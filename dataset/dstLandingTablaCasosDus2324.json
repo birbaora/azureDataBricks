@@ -1,0 +1,26 @@
+{
+	"name": "dstLandingTablaCasosDus2324",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlob_Storage_cas_dus2324",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Caso de Uso 23-24"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "landing2324"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

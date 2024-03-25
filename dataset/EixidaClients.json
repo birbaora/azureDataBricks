@@ -1,0 +1,64 @@
+{
+	"name": "EixidaClients",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Carpeta_Ventas"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "clientes.csv",
+				"container": "ventas"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "Nombre completo",
+				"type": "String"
+			},
+			{
+				"name": "Fecha de nacimiento",
+				"type": "String"
+			},
+			{
+				"name": "Dirección",
+				"type": "String"
+			},
+			{
+				"name": "Localidad y Código postal",
+				"type": "String"
+			},
+			{
+				"name": "Teléfono",
+				"type": "String"
+			},
+			{
+				"name": "Correo electrónico",
+				"type": "String"
+			},
+			{
+				"name": "Fecha de alta",
+				"type": "String"
+			},
+			{
+				"name": "Grupo de clientes",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

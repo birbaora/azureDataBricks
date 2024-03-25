@@ -1,0 +1,56 @@
+{
+	"name": "SalidaProveedores",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Carpeta_Ventas"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Proveedores.csv",
+				"container": "ventas"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "Proveedor",
+				"type": "String"
+			},
+			{
+				"name": "Contacto comercial",
+				"type": "String"
+			},
+			{
+				"name": "Email",
+				"type": "String"
+			},
+			{
+				"name": "Teléfono",
+				"type": "String"
+			},
+			{
+				"name": "Saldo pendiente",
+				"type": "String"
+			},
+			{
+				"name": "Fecha de última compra",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

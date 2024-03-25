@@ -1,0 +1,84 @@
+{
+	"name": "salidaVentas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Carpeta_Ventas"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Ventas.csv",
+				"container": "ventas"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ID Cliente",
+				"type": "String"
+			},
+			{
+				"name": "Zona",
+				"type": "String"
+			},
+			{
+				"name": "País",
+				"type": "String"
+			},
+			{
+				"name": "Tipo de producto",
+				"type": "String"
+			},
+			{
+				"name": "Canal de venta",
+				"type": "String"
+			},
+			{
+				"name": "Prioridad",
+				"type": "String"
+			},
+			{
+				"name": "Fecha pedido",
+				"type": "String"
+			},
+			{
+				"name": "ID Pedido",
+				"type": "String"
+			},
+			{
+				"name": "Fecha envío",
+				"type": "String"
+			},
+			{
+				"name": "Unidades",
+				"type": "String"
+			},
+			{
+				"name": "Precio Unitario",
+				"type": "String"
+			},
+			{
+				"name": "Coste unitario",
+				"type": "String"
+			},
+			{
+				"name": "Importe venta total",
+				"type": "String"
+			},
+			{
+				"name": "Importe Coste total",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

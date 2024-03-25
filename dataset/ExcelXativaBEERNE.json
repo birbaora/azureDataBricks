@@ -1,0 +1,21 @@
+{
+	"name": "ExcelXativaBEERNE",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "blobStorageNE",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "EXT",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "XATIVA_Pivot_Beer.xls",
+				"container": "cervessesne"
+			}
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

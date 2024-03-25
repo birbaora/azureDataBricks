@@ -1,0 +1,148 @@
+{
+	"name": "salidaVentasTotal",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "EixidaClients",
+						"type": "DatasetReference"
+					},
+					"name": "salidaClientes"
+				},
+				{
+					"dataset": {
+						"referenceName": "SalidaProveedores",
+						"type": "DatasetReference"
+					},
+					"name": "salidaproveedores"
+				},
+				{
+					"dataset": {
+						"referenceName": "salidaVentas",
+						"type": "DatasetReference"
+					},
+					"name": "salidaVentas"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SalidaVentasTotal",
+						"type": "DatasetReference"
+					},
+					"name": "DestinoVentasTotal"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as string,",
+				"          {Nombre completo} as string,",
+				"          {Fecha de nacimiento} as string,",
+				"          {Dirección} as string,",
+				"          {Localidad y Código postal} as string,",
+				"          {Teléfono} as string,",
+				"          {Correo electrónico} as string,",
+				"          {Fecha de alta} as string,",
+				"          {Grupo de clientes} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> salidaClientes",
+				"source(output(",
+				"          ID as string,",
+				"          Proveedor as string,",
+				"          {Contacto comercial} as string,",
+				"          Email as string,",
+				"          {Teléfono} as string,",
+				"          {Saldo pendiente} as string,",
+				"          {Fecha de última compra} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> salidaproveedores",
+				"source(output(",
+				"          {ID Cliente} as string,",
+				"          Zona as string,",
+				"          {País} as string,",
+				"          {Tipo de producto} as string,",
+				"          {Canal de venta} as string,",
+				"          Prioridad as string,",
+				"          {Fecha pedido} as string,",
+				"          {ID Pedido} as string,",
+				"          {Fecha envío} as string,",
+				"          Unidades as string,",
+				"          {Precio Unitario} as string,",
+				"          {Coste unitario} as string,",
+				"          {Importe venta total} as string,",
+				"          {Importe Coste total} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> salidaVentas",
+				"salidaClientes, salidaVentas join(ID == {ID Cliente},",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1, salidaproveedores join({ID Pedido} == salidaproveedores@ID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"join2 select(mapColumn(",
+				"          ID = salidaClientes@ID,",
+				"          {Nombre completo},",
+				"          {Fecha de nacimiento},",
+				"          {Dirección},",
+				"          {Localidad y Código postal},",
+				"          {Teléfono} = salidaClientes@{Teléfono},",
+				"          {Correo electrónico},",
+				"          {Fecha de alta},",
+				"          {Grupo de clientes},",
+				"          {ID Cliente},",
+				"          Zona,",
+				"          {País},",
+				"          {Tipo de producto},",
+				"          {Canal de venta},",
+				"          Prioridad,",
+				"          {Fecha pedido},",
+				"          {ID Pedido},",
+				"          {Fecha envío},",
+				"          Unidades,",
+				"          {Precio Unitario},",
+				"          {Coste unitario},",
+				"          {Importe venta total},",
+				"          {Importe Coste total},",
+				"          ID = salidaproveedores@ID,",
+				"          Proveedor,",
+				"          {Contacto comercial},",
+				"          Email,",
+				"          {Teléfono} = salidaproveedores@{Teléfono},",
+				"          {Saldo pendiente},",
+				"          {Fecha de última compra}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['SalidaVentasMAL.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> DestinoVentasTotal"
+			]
+		}
+	}
+}

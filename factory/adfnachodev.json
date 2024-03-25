@@ -1,0 +1,9 @@
+{
+	"name": "adfnachodev",
+	"location": "westeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "14a31f28-a209-4320-87dd-afc172f96f8e",
+		"tenantId": "b7173ba4-0f89-45f7-853b-50929c360774"
+	}
+}

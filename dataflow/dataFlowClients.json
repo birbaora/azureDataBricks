@@ -1,0 +1,74 @@
+{
+	"name": "dataFlowClients",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Listado_Clientes",
+						"type": "DatasetReference"
+					},
+					"name": "sourceClients"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "EixidaClients",
+						"type": "DatasetReference"
+					},
+					"name": "salidaClientes"
+				}
+			],
+			"transformations": [
+				{
+					"name": "tractamentData"
+				},
+				{
+					"name": "tractamentEmail"
+				},
+				{
+					"name": "tractamentDataAlta"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as string,",
+				"          {Nombre completo} as string,",
+				"          {Fecha de nacimiento} as string,",
+				"          {Dirección} as string,",
+				"          {Localidad y Código postal} as string,",
+				"          {Teléfono} as string,",
+				"          {Correo electrónico} as string,",
+				"          {Fecha de alta} as string,",
+				"          {Grupo de clientes} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     limit: 100,",
+				"     ignoreNoFilesFound: false) ~> sourceClients",
+				"sourceClients derive({Fecha de nacimiento} = iif(regexMatch({Fecha de nacimiento}, '^[0-9]{4}-[01][0-9]-[0123][0-9]$'),{Fecha de nacimiento}, toString(null()))) ~> tractamentData",
+				"tractamentData derive({Correo electrónico} = iif(regexMatch( translate({Correo electrónico}, ',', '.'), '[^@]+@[^@]+'),{Correo electrónico},translate({Correo electrónico}, '-', '@'))) ~> tractamentEmail",
+				"tractamentEmail derive({Fecha de alta} = iif(regexMatch({Fecha de alta}, '^[0-9]{4}-[01][0-9]-[0123][0-9]T[0-9]{2}:[0-9]{2}:[0-9]{2}'),{Fecha de alta}, toString(null()))) ~> tractamentDataAlta",
+				"tractamentDataAlta sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ID as string,",
+				"          {Nombre completo} as string,",
+				"          {Fecha de nacimiento} as string,",
+				"          {Dirección} as string,",
+				"          {Localidad y Código postal} as string,",
+				"          {Teléfono} as string,",
+				"          {Correo electrónico} as string,",
+				"          {Fecha de alta} as string,",
+				"          {Grupo de clientes} as string",
+				"     ),",
+				"     partitionFileNames:['clientes.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> salidaClientes"
+			]
+		}
+	}
+}

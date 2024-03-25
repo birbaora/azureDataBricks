@@ -1,0 +1,61 @@
+{
+	"name": "dataFlowProveedores",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Listado_Proveedores",
+						"type": "DatasetReference"
+					},
+					"name": "sourceProveedores"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SalidaProveedores",
+						"type": "DatasetReference"
+					},
+					"name": "DestinoProveedores"
+				}
+			],
+			"transformations": [
+				{
+					"name": "TramientoDatos"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as string,",
+				"          Proveedor as string,",
+				"          {Contacto comercial} as string,",
+				"          Email as string,",
+				"          {Teléfono} as string,",
+				"          {Saldo pendiente} as string,",
+				"          {Fecha de última compra} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> sourceProveedores",
+				"sourceProveedores derive(Email = iif(regexMatch( translate(Email, ',', '.'), '[^@]+@[^@]+'),Email,translate(Email, '-', '@'))) ~> TramientoDatos",
+				"TramientoDatos sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ID as string,",
+				"          Proveedor as string,",
+				"          {Contacto comercial} as string,",
+				"          Email as string,",
+				"          {Teléfono} as string,",
+				"          {Saldo pendiente} as string,",
+				"          {Fecha de última compra} as string",
+				"     ),",
+				"     partitionFileNames:['Proveedores.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> DestinoProveedores"
+			]
+		}
+	}
+}

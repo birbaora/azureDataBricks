@@ -1,0 +1,70 @@
+{
+	"name": "dataFlowVentas",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Registros_ventas",
+						"type": "DatasetReference"
+					},
+					"name": "sourceVentas"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "salidaVentas",
+						"type": "DatasetReference"
+					},
+					"name": "salidaVentas"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          {ID Cliente} as string,",
+				"          Zona as string,",
+				"          {País} as string,",
+				"          {Tipo de producto} as string,",
+				"          {Canal de venta} as string,",
+				"          Prioridad as string,",
+				"          {Fecha pedido} as string,",
+				"          {ID Pedido} as string,",
+				"          {Fecha envío} as string,",
+				"          Unidades as string,",
+				"          {Precio Unitario} as string,",
+				"          {Coste unitario} as string,",
+				"          {Importe venta total} as string,",
+				"          {Importe Coste total} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> sourceVentas",
+				"sourceVentas sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          {ID Cliente} as string,",
+				"          Zona as string,",
+				"          {País} as string,",
+				"          {Tipo de producto} as string,",
+				"          {Canal de venta} as string,",
+				"          Prioridad as string,",
+				"          {Fecha pedido} as string,",
+				"          {ID Pedido} as string,",
+				"          {Fecha envío} as string,",
+				"          Unidades as string,",
+				"          {Precio Unitario} as string,",
+				"          {Coste unitario} as string,",
+				"          {Importe venta total} as string,",
+				"          {Importe Coste total} as string",
+				"     ),",
+				"     partitionFileNames:['Ventas.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> salidaVentas"
+			]
+		}
+	}
+}

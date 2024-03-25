@@ -1,0 +1,61 @@
+{
+	"name": "Fichero_casos_covid_2324",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlob_Storage_cas_dus2324",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Caso de Uso 23-24"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "casos_hosp_uci_def_sexo_edad_provres_full.csv",
+				"folderPath": "Font de dades",
+				"container": "landing2324"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "provincia_iso",
+				"type": "String"
+			},
+			{
+				"name": "sexo",
+				"type": "String"
+			},
+			{
+				"name": "grupo_edad",
+				"type": "String"
+			},
+			{
+				"name": "fecha",
+				"type": "String"
+			},
+			{
+				"name": "num_casos",
+				"type": "String"
+			},
+			{
+				"name": "num_hosp",
+				"type": "String"
+			},
+			{
+				"name": "num_uci",
+				"type": "String"
+			},
+			{
+				"name": "num_def",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,20 @@
+{
+	"name": "src_dst_sql_covid_23_24",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Caso de Uso 23-24"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "SRC_COVID"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
