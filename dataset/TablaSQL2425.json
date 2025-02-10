@@ -1,0 +1,49 @@
+{
+	"name": "TablaSQL2425",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "provincia_iso",
+				"type": "nvarchar"
+			},
+			{
+				"name": "sexo",
+				"type": "nvarchar"
+			},
+			{
+				"name": "grupo_edad",
+				"type": "nvarchar"
+			},
+			{
+				"name": "fecha",
+				"type": "nvarchar"
+			},
+			{
+				"name": "num_casos",
+				"type": "nvarchar"
+			},
+			{
+				"name": "num_hosp",
+				"type": "nvarchar"
+			},
+			{
+				"name": "num_uci",
+				"type": "nvarchar"
+			},
+			{
+				"name": "num_def",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "SRC_COVID"
+		}
+	}
+}
