@@ -43,7 +43,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "DelimitedText1",
+						"referenceName": "datos_lliga",
 						"type": "DatasetReference"
 					}
 				],

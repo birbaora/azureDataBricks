@@ -1,5 +1,5 @@
 {
-	"name": "DelimitedText1",
+	"name": "datos_lliga",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorage1",
