@@ -1,0 +1,89 @@
+{
+	"name": "tablaBillionaris",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "billonaris",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "identificador",
+				"type": "nvarchar"
+			},
+			{
+				"name": "name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "last_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "age",
+				"type": "nvarchar"
+			},
+			{
+				"name": "gender",
+				"type": "nvarchar"
+			},
+			{
+				"name": "time",
+				"type": "nvarchar"
+			},
+			{
+				"name": "permanent_country",
+				"type": "nvarchar"
+			},
+			{
+				"name": "company",
+				"type": "nvarchar"
+			},
+			{
+				"name": "main_industry",
+				"type": "nvarchar"
+			},
+			{
+				"name": "wealth_source_details",
+				"type": "nvarchar"
+			},
+			{
+				"name": "industry",
+				"type": "nvarchar"
+			},
+			{
+				"name": "state",
+				"type": "nvarchar"
+			},
+			{
+				"name": "headquarters",
+				"type": "nvarchar"
+			},
+			{
+				"name": "countries",
+				"type": "nvarchar"
+			},
+			{
+				"name": "annual_income",
+				"type": "nvarchar"
+			},
+			{
+				"name": "daily_income",
+				"type": "nvarchar"
+			},
+			{
+				"name": "birth_year",
+				"type": "nvarchar"
+			},
+			{
+				"name": "name_cleaned",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "BILLONARIS"
+		}
+	}
+}
