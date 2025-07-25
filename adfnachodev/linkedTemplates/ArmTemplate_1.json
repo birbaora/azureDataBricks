@@ -664,6 +664,98 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/tablaBillionaris')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "billonaris",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "identificador",
+						"type": "nvarchar"
+					},
+					{
+						"name": "name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "last_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "age",
+						"type": "nvarchar"
+					},
+					{
+						"name": "gender",
+						"type": "nvarchar"
+					},
+					{
+						"name": "time",
+						"type": "nvarchar"
+					},
+					{
+						"name": "permanent_country",
+						"type": "nvarchar"
+					},
+					{
+						"name": "company",
+						"type": "nvarchar"
+					},
+					{
+						"name": "main_industry",
+						"type": "nvarchar"
+					},
+					{
+						"name": "wealth_source_details",
+						"type": "nvarchar"
+					},
+					{
+						"name": "industry",
+						"type": "nvarchar"
+					},
+					{
+						"name": "state",
+						"type": "nvarchar"
+					},
+					{
+						"name": "headquarters",
+						"type": "nvarchar"
+					},
+					{
+						"name": "countries",
+						"type": "nvarchar"
+					},
+					{
+						"name": "annual_income",
+						"type": "nvarchar"
+					},
+					{
+						"name": "daily_income",
+						"type": "nvarchar"
+					},
+					{
+						"name": "birth_year",
+						"type": "nvarchar"
+					},
+					{
+						"name": "name_cleaned",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "BILLONARIS"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LoadBeers')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -743,82 +835,6 @@
 				"lastPublishTime": "2023-03-27T16:08:14Z"
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/cargar_tabla_casos_covid')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Cargar_tabla_covid_casoUso2324",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false,
-								"tableOption": "autoCreate",
-								"disableMetricsCollection": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "Fichero_casos_covid_2324",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "src_dst_sql_covid_23_24",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"folder": {
-					"name": "Caso de USO 23-24"
-				},
-				"annotations": [],
-				"lastPublishTime": "2024-03-11T18:18:01Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/src_dst_sql_covid_23_24')]"
-			]
 		}
 	]
 }
