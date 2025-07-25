@@ -1,0 +1,1195 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adfnachodev"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/extraerZip')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ExtraerZip_de_fichero_a_carpeta",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": false,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings",
+									"compressionProperties": {
+										"type": "ZipDeflateReadSettings",
+										"preserveZipFileNameAsFolder": false
+									}
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".csv"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "CasDus_23_24_Zip_origen",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dstLandingTablaCasosDus2324",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Caso de USO 23-24"
+				},
+				"annotations": [],
+				"lastPublishTime": "2024-03-11T19:19:48Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipe_csv_a_tabla2425')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "act_csv_a_tabla",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "datos_lliga",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "TablaSQL2425",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tabla_covid')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Fase1 tabla covid",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "src_covid",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "landing_Covid",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Caso de USO"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-27T16:08:14Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tabla_data')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Fase1 tabla data",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "src_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "landing_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Caso de USO"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-27T16:08:15Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tabla_grup_edat')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Fase1 tabla data",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "src_grup_edat",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "landing_grup_edat",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Caso de USO"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-27T16:20:57Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tabla_provincies')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Fase1 tabla data",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "src_grup_provincies",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "landing_provincies",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Caso de USO"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-27T16:20:57Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tabla_sexe')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Fase1 tabla sexe",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "src_grup_sexe",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "landing_sexe",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Caso de USO"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-27T16:32:16Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataFlowClients')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Listado_Clientes",
+								"type": "DatasetReference"
+							},
+							"name": "sourceClients"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "EixidaClients",
+								"type": "DatasetReference"
+							},
+							"name": "salidaClientes"
+						}
+					],
+					"transformations": [
+						{
+							"name": "tractamentData"
+						},
+						{
+							"name": "tractamentEmail"
+						},
+						{
+							"name": "tractamentDataAlta"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as string,",
+						"          {Nombre completo} as string,",
+						"          {Fecha de nacimiento} as string,",
+						"          {Dirección} as string,",
+						"          {Localidad y Código postal} as string,",
+						"          {Teléfono} as string,",
+						"          {Correo electrónico} as string,",
+						"          {Fecha de alta} as string,",
+						"          {Grupo de clientes} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     limit: 100,",
+						"     ignoreNoFilesFound: false) ~> sourceClients",
+						"sourceClients derive({Fecha de nacimiento} = iif(regexMatch({Fecha de nacimiento}, '^[0-9]{4}-[01][0-9]-[0123][0-9]$'),{Fecha de nacimiento}, toString(null()))) ~> tractamentData",
+						"tractamentData derive({Correo electrónico} = iif(regexMatch( translate({Correo electrónico}, ',', '.'), '[^@]+@[^@]+'),{Correo electrónico},translate({Correo electrónico}, '-', '@'))) ~> tractamentEmail",
+						"tractamentEmail derive({Fecha de alta} = iif(regexMatch({Fecha de alta}, '^[0-9]{4}-[01][0-9]-[0123][0-9]T[0-9]{2}:[0-9]{2}:[0-9]{2}'),{Fecha de alta}, toString(null()))) ~> tractamentDataAlta",
+						"tractamentDataAlta sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ID as string,",
+						"          {Nombre completo} as string,",
+						"          {Fecha de nacimiento} as string,",
+						"          {Dirección} as string,",
+						"          {Localidad y Código postal} as string,",
+						"          {Teléfono} as string,",
+						"          {Correo electrónico} as string,",
+						"          {Fecha de alta} as string,",
+						"          {Grupo de clientes} as string",
+						"     ),",
+						"     partitionFileNames:['clientes.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> salidaClientes"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataFlowProveedores')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Listado_Proveedores",
+								"type": "DatasetReference"
+							},
+							"name": "sourceProveedores"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "SalidaProveedores",
+								"type": "DatasetReference"
+							},
+							"name": "DestinoProveedores"
+						}
+					],
+					"transformations": [
+						{
+							"name": "TramientoDatos"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as string,",
+						"          Proveedor as string,",
+						"          {Contacto comercial} as string,",
+						"          Email as string,",
+						"          {Teléfono} as string,",
+						"          {Saldo pendiente} as string,",
+						"          {Fecha de última compra} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> sourceProveedores",
+						"sourceProveedores derive(Email = iif(regexMatch( translate(Email, ',', '.'), '[^@]+@[^@]+'),Email,translate(Email, '-', '@'))) ~> TramientoDatos",
+						"TramientoDatos sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ID as string,",
+						"          Proveedor as string,",
+						"          {Contacto comercial} as string,",
+						"          Email as string,",
+						"          {Teléfono} as string,",
+						"          {Saldo pendiente} as string,",
+						"          {Fecha de última compra} as string",
+						"     ),",
+						"     partitionFileNames:['Proveedores.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> DestinoProveedores"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataFlowVentas')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Registros_ventas",
+								"type": "DatasetReference"
+							},
+							"name": "sourceVentas"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "salidaVentas",
+								"type": "DatasetReference"
+							},
+							"name": "salidaVentas"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          {ID Cliente} as string,",
+						"          Zona as string,",
+						"          {País} as string,",
+						"          {Tipo de producto} as string,",
+						"          {Canal de venta} as string,",
+						"          Prioridad as string,",
+						"          {Fecha pedido} as string,",
+						"          {ID Pedido} as string,",
+						"          {Fecha envío} as string,",
+						"          Unidades as string,",
+						"          {Precio Unitario} as string,",
+						"          {Coste unitario} as string,",
+						"          {Importe venta total} as string,",
+						"          {Importe Coste total} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> sourceVentas",
+						"sourceVentas sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          {ID Cliente} as string,",
+						"          Zona as string,",
+						"          {País} as string,",
+						"          {Tipo de producto} as string,",
+						"          {Canal de venta} as string,",
+						"          Prioridad as string,",
+						"          {Fecha pedido} as string,",
+						"          {ID Pedido} as string,",
+						"          {Fecha envío} as string,",
+						"          Unidades as string,",
+						"          {Precio Unitario} as string,",
+						"          {Coste unitario} as string,",
+						"          {Importe venta total} as string,",
+						"          {Importe Coste total} as string",
+						"     ),",
+						"     partitionFileNames:['Ventas.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> salidaVentas"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/salidaVentasTotal')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "EixidaClients",
+								"type": "DatasetReference"
+							},
+							"name": "salidaClientes"
+						},
+						{
+							"dataset": {
+								"referenceName": "SalidaProveedores",
+								"type": "DatasetReference"
+							},
+							"name": "salidaproveedores"
+						},
+						{
+							"dataset": {
+								"referenceName": "salidaVentas",
+								"type": "DatasetReference"
+							},
+							"name": "salidaVentas"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "SalidaVentasTotal",
+								"type": "DatasetReference"
+							},
+							"name": "DestinoVentasTotal"
+						}
+					],
+					"transformations": [
+						{
+							"name": "join1"
+						},
+						{
+							"name": "join2"
+						},
+						{
+							"name": "select1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as string,",
+						"          {Nombre completo} as string,",
+						"          {Fecha de nacimiento} as string,",
+						"          {Dirección} as string,",
+						"          {Localidad y Código postal} as string,",
+						"          {Teléfono} as string,",
+						"          {Correo electrónico} as string,",
+						"          {Fecha de alta} as string,",
+						"          {Grupo de clientes} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> salidaClientes",
+						"source(output(",
+						"          ID as string,",
+						"          Proveedor as string,",
+						"          {Contacto comercial} as string,",
+						"          Email as string,",
+						"          {Teléfono} as string,",
+						"          {Saldo pendiente} as string,",
+						"          {Fecha de última compra} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> salidaproveedores",
+						"source(output(",
+						"          {ID Cliente} as string,",
+						"          Zona as string,",
+						"          {País} as string,",
+						"          {Tipo de producto} as string,",
+						"          {Canal de venta} as string,",
+						"          Prioridad as string,",
+						"          {Fecha pedido} as string,",
+						"          {ID Pedido} as string,",
+						"          {Fecha envío} as string,",
+						"          Unidades as string,",
+						"          {Precio Unitario} as string,",
+						"          {Coste unitario} as string,",
+						"          {Importe venta total} as string,",
+						"          {Importe Coste total} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> salidaVentas",
+						"salidaClientes, salidaVentas join(ID == {ID Cliente},",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1, salidaproveedores join({ID Pedido} == salidaproveedores@ID,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join2",
+						"join2 select(mapColumn(",
+						"          ID = salidaClientes@ID,",
+						"          {Nombre completo},",
+						"          {Fecha de nacimiento},",
+						"          {Dirección},",
+						"          {Localidad y Código postal},",
+						"          {Teléfono} = salidaClientes@{Teléfono},",
+						"          {Correo electrónico},",
+						"          {Fecha de alta},",
+						"          {Grupo de clientes},",
+						"          {ID Cliente},",
+						"          Zona,",
+						"          {País},",
+						"          {Tipo de producto},",
+						"          {Canal de venta},",
+						"          Prioridad,",
+						"          {Fecha pedido},",
+						"          {ID Pedido},",
+						"          {Fecha envío},",
+						"          Unidades,",
+						"          {Precio Unitario},",
+						"          {Coste unitario},",
+						"          {Importe venta total},",
+						"          {Importe Coste total},",
+						"          ID = salidaproveedores@ID,",
+						"          Proveedor,",
+						"          {Contacto comercial},",
+						"          Email,",
+						"          {Teléfono} = salidaproveedores@{Teléfono},",
+						"          {Saldo pendiente},",
+						"          {Fecha de última compra}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['SalidaVentasMAL.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> DestinoVentasTotal"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Fase_Landing_Completa')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "covid",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "tabla_covid",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "data",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "covid",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "tabla_data",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "grup_edat",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "data",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "tabla_grup_edat",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "provincies",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "grup_edat",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "tabla_provincies",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "sexe",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "provincies",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "tabla_sexe",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Caso de USO"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-04-03T15:37:05Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/tabla_covid')]",
+				"[concat(variables('factoryId'), '/pipelines/tabla_data')]",
+				"[concat(variables('factoryId'), '/pipelines/tabla_grup_edat')]",
+				"[concat(variables('factoryId'), '/pipelines/tabla_provincies')]",
+				"[concat(variables('factoryId'), '/pipelines/tabla_sexe')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PipeLinesVentas')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "dataFlowClients",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataFlowClients",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"sourceClients": {},
+									"salidaClientes": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "dataFlowProveedores",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "dataFlowClients",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataFlowProveedores",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"sourceProveedores": {},
+									"DestinoProveedores": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "dataFlowVentas",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "dataFlowProveedores",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataFlowVentas",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"sourceVentas": {},
+									"salidaVentas": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "salidaVentasTotal",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "dataFlowVentas",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "salidaVentasTotal",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"salidaClientes": {},
+									"salidaproveedores": {},
+									"salidaVentas": {},
+									"DestinoVentasTotal": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Anteriores"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-27T16:08:14Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/dataFlowClients')]",
+				"[concat(variables('factoryId'), '/dataflows/dataFlowProveedores')]",
+				"[concat(variables('factoryId'), '/dataflows/dataFlowVentas')]",
+				"[concat(variables('factoryId'), '/dataflows/salidaVentasTotal')]"
+			]
+		}
+	]
+}
